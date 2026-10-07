@@ -91,8 +91,8 @@ kbd { font: inherit; }
 .eyebrow .rule { display: block; width: 40px; height: 1px; background: currentColor; opacity: .6; }
 
 .h1 {
-  margin: 0; max-width: min(500px, 36vw);
-  font-weight: 300; font-size: clamp(40px, 3.8vw, 60px); line-height: 1; letter-spacing: -.015em;
+  margin: 0; max-width: 600px;
+  font-weight: 300; font-size: clamp(42px, 4.6vw, 76px); line-height: 1; letter-spacing: -.015em;
 }
 .h1 em { font-style: italic; color: var(--ice-2); }
 .h2 { margin: 0; font-weight: 300; font-size: clamp(48px, 5vw, 76px); line-height: .95; letter-spacing: -.01em; }
@@ -216,32 +216,37 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 .pill:hover { color: #0B0E11; background: #EEF2F4; border-color: #EEF2F4; }
 
 /* ════ 01 ENTRANCE ═══════════════════════════════════════════════ */
-/* Кадр «издалека», как на макете: в полосе ~85% ширины сцены — голова
-   целиком, накидка, горы и солнце. Ниже кадра тело продолжается и
-   постепенно размывается до цвета фона (это запечено в hero.avif),
-   поэтому у фото нет жёстких краёв. Полоса начинается от левого края
-   сетки контента: на широких экранах девушка остаётся справа от текста. */
+/* Без фото: текст слева, справа — продукт и его деплой в стеклянных окнах
+   на холодном свете. Свет — главный материал экрана. */
 .hero {
-  --band-ar: 1.63;
   position: relative; overflow: hidden; background: #0B0E11;
-  min-height: calc(min(100vw, 50vw + 720px) / var(--band-ar));
+  min-height: clamp(700px, 100vh, 940px); display: flex; flex-direction: column; justify-content: center;
 }
-.hero-media { position: absolute; top: 0; left: max(0px, calc(50% - 720px)); right: 0; aspect-ratio: var(--band-ar); overflow: hidden; }
-.hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 35% 0; }
-.hero-shade {
-  position: absolute; inset: 0;
+.hero-light {
+  position: absolute; inset: -10% -5%; pointer-events: none;
   background:
-    linear-gradient(180deg, #0B0E11 0%, rgba(11, 14, 17, .45) 4%, rgba(11, 14, 17, 0) 10%, rgba(11, 14, 17, 0) 86%, #0B0E11 100%),
-    linear-gradient(90deg, #0B0E11 0%, rgba(11, 14, 17, .78) 10%, rgba(11, 14, 17, .55) 22%, rgba(11, 14, 17, .18) 36%, rgba(11, 14, 17, 0) 48%);
+    radial-gradient(ellipse 44% 54% at 72% 50%, rgba(120, 170, 196, .36), rgba(11, 14, 17, 0) 70%),
+    radial-gradient(ellipse 24% 30% at 84% 24%, rgba(220, 238, 246, .2), rgba(11, 14, 17, 0) 70%),
+    radial-gradient(ellipse 30% 22% at 60% 86%, rgba(159, 211, 230, .12), rgba(11, 14, 17, 0) 70%),
+    radial-gradient(ellipse 45% 55% at 10% 92%, rgba(60, 96, 116, .16), rgba(11, 14, 17, 0) 70%);
+  animation: drift 26s ease-in-out infinite alternate;
 }
-.hero-body { position: relative; z-index: 3; padding-top: calc(var(--header-h) + clamp(28px, 4.5vw, 84px)); padding-bottom: 56px; }
+.hero-grid {
+  position: relative; z-index: 3; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 540px); align-items: center; gap: 48px 72px;
+  padding-top: calc(var(--header-h) + 40px); padding-bottom: 72px;
+}
+.hero-body { position: relative; }
 .hero-body .eyebrow { margin-bottom: 30px; }
-.hero-lead { margin: 28px 0 0; max-width: min(400px, 38vw); font-size: 15.5px; line-height: 1.7; color: #C4CDD3; }
+.hero-lead { margin: 28px 0 0; max-width: 440px; font-size: 15.5px; line-height: 1.7; color: #C4CDD3; }
 .hero-cta { margin-top: 36px; display: flex; gap: 16px; flex-wrap: wrap; }
 
+/* окна: дашборд продукта и терминал, который его выкатывает, — внахлёст */
+.hero-stage { position: relative; padding-bottom: 72px; }
 .term {
-  position: absolute; z-index: 3; right: var(--gutter); bottom: 56px; width: 300px;
-  border-radius: 12px; background: rgba(11, 14, 17, .5); border-color: rgba(255, 255, 255, .16); overflow: hidden;
+  position: absolute; z-index: 5; left: -56px; bottom: 0; width: 300px;
+  border-radius: 12px; background: rgba(11, 14, 17, .62); border-color: rgba(255, 255, 255, .16); overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 40px 80px -30px rgba(0, 0, 0, .85);
 }
 .term-body { padding: 12px 16px 14px; font-size: 10.5px; line-height: 1.85; color: #DDE6EB; }
 .term-body > div { white-space: pre; min-height: 1.85em; }
@@ -253,8 +258,7 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 .term [data-final] { transition: opacity 1s var(--ease); }
 
 .dash {
-  display: none;
-  position: absolute; z-index: 4; right: var(--gutter); top: calc(var(--header-h) + 32px); width: 500px;
+  position: relative; z-index: 4; width: 100%;
   border-radius: 16px; overflow: hidden; border-color: rgba(255, 255, 255, .2);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 50px 100px -40px rgba(0, 0, 0, .8);
 }
@@ -672,14 +676,9 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 .beneath .tone-light[data-x]::after, .beneath .tone-light [data-x]::after { background: #2F6A88; color: #EEF2F4; }
 .beneath .site-footer[data-x]::after { top: auto; bottom: 100%; }
 .beneath .hero[data-x]::after { top: calc(var(--header-h) + 2px); }
-.beneath .dash { display: block; animation: emerge 1.2s var(--ease) both; }
 .beneath .obj-preview[data-x]::after { top: auto; bottom: 0; }
 [tabindex="-1"]:focus { outline: none; }
 
-.hero-media img { transition: filter 1.4s var(--ease), opacity 1.4s var(--ease), transform 1.6s var(--ease); }
-.beneath .hero-media img {
-  filter: grayscale(1) brightness(.38) contrast(1.15);
-}
 .beneath .standard-img { filter: grayscale(1) brightness(1.25) contrast(.8); }
 
 .hud {
@@ -729,13 +728,16 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 .palette-foot kbd { min-width: 18px; height: 18px; }
 
 /* ════ RESPONSIVE ════════════════════════════════════════════════ */
+@media (min-width: 1600px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 620px); }
+}
 @media (max-width: 1360px) {
   .tagline { display: none; }
 }
 @media (max-width: 1240px) {
   .nav, .tagline { display: none; }
   .hctl { margin-left: auto; }
-  .dash { width: 440px; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 470px); gap: 48px 56px; }
 }
 /* Объекты: три колонки только там, где превью шире ~560px */
 @media (max-width: 1320px) {
@@ -744,22 +746,22 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
   .thumb[aria-pressed="true"] { transform: translateY(-4px); }
 }
 @media (max-width: 1100px) {
-  .hero-media img { object-position: 0 0; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 420px); }
+  .term { left: -36px; width: 280px; }
   .house-row { gap: 48px 56px; }
   .objects-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "info" "preview" "thumbs"; gap: 32px; }
   .objects-info { max-width: 560px; }
 }
 @media (max-width: 900px) {
-  .term, .beneath .dash { display: none; }
   .house-row { grid-template-columns: minmax(0, 1fr); align-items: start; padding-top: 88px; padding-bottom: 88px; }
-  /* Планшет и телефон: портретный кадр сверху, текст ниже — на растворении */
-  .hero { --band-ar: .823; min-height: calc(100vw / var(--band-ar)); }
-  .hero-media { left: 0; }
-  .hero-media img { object-position: 30% 0; }
-  .hero-shade { background: linear-gradient(180deg, #0B0E11 0%, rgba(11, 14, 17, .4) 4%, rgba(11, 14, 17, 0) 10%, rgba(11, 14, 17, 0) 58%, rgba(11, 14, 17, .5) 74%, rgba(11, 14, 17, .4) 86%, #0B0E11 100%); }
-  .hero-body { padding-top: calc(100vw / var(--band-ar) * .72); padding-bottom: 44px; }
+  /* Планшет и телефон: текст, под ним окна продукта и деплоя */
+  .hero { min-height: 0; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; padding-top: calc(var(--header-h) + 56px); padding-bottom: 64px; }
+  .hero-light { background: radial-gradient(ellipse 75% 34% at 60% 76%, rgba(120, 170, 196, .34), rgba(11, 14, 17, 0) 70%), radial-gradient(ellipse 50% 20% at 80% 62%, rgba(220, 238, 246, .14), rgba(11, 14, 17, 0) 70%), radial-gradient(ellipse 60% 30% at 20% 12%, rgba(60, 96, 116, .16), rgba(11, 14, 17, 0) 70%); }
+  .hero-stage { max-width: 600px; padding-bottom: 88px; }
+  .term { left: 28px; width: min(300px, calc(100% - 28px)); }
   .h1, .hero-lead { max-width: none; }
-  .scroll-hint { margin-top: 36px; }
+  .scroll-hint { display: none; }
 }
 @media (max-width: 760px) {
   :root { --gutter: 20px; --header-h: 72px; }
@@ -769,8 +771,16 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
   .beneath-toggle, .palette-btn { padding: 0 12px; }
   .pill { padding: 0 18px; }
 
-  .hero { --band-ar: .518; }
-  .hero-media img { object-position: 14% 0; }
+  .hero-grid { padding-top: calc(var(--header-h) + 40px); gap: 40px; }
+  .hero-stage { padding-bottom: 96px; }
+  .term { left: 16px; }
+  .dash-rail { display: none; }
+  .dash-main { padding: 14px; gap: 12px; }
+  .kpis { gap: 6px; }
+  .kpi { padding: 8px 9px; }
+  .kpi b { font-size: 20px; }
+  .kpi span { letter-spacing: .08em; }
+  .funnel span { font-size: 7.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hero-body .eyebrow { margin-bottom: 26px; gap: 10px; letter-spacing: .18em; }
   .eyebrow .rule { width: 20px; }
   .hero-lead { font-size: 15px; }
