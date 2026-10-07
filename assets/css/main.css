@@ -217,20 +217,22 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 
 /* ════ 01 ENTRANCE ═══════════════════════════════════════════════ */
 /* Кадр «издалека», как на макете: в полосе ~85% ширины сцены — голова
-   целиком, накидка, горы и солнце. Полоса начинается от левого края сетки
-   контента, поэтому на широких экранах девушка остаётся справа от текста,
-   а пропорция держит композицию одинаковой на любой ширине. */
+   целиком, накидка, горы и солнце. Ниже кадра тело продолжается и
+   постепенно размывается до цвета фона (это запечено в hero.avif),
+   поэтому у фото нет жёстких краёв. Полоса начинается от левого края
+   сетки контента: на широких экранах девушка остаётся справа от текста. */
 .hero {
+  --band-ar: 1.63;
   position: relative; overflow: hidden; background: #0B0E11;
-  min-height: min(calc(min(100vw, 50vw + 720px) / 2.5 + 40px), calc(100vh + 40px));
+  min-height: calc(min(100vw, 50vw + 720px) / var(--band-ar));
 }
-.hero-media { position: absolute; top: 0; left: max(0px, calc(50% - 720px)); right: 0; aspect-ratio: 2.5; max-height: 100vh; overflow: hidden; }
+.hero-media { position: absolute; top: 0; left: max(0px, calc(50% - 720px)); right: 0; aspect-ratio: var(--band-ar); overflow: hidden; }
 .hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 35% 0; }
 .hero-shade {
   position: absolute; inset: 0;
   background:
-    linear-gradient(180deg, rgba(11, 14, 17, .5) 0%, rgba(11, 14, 17, 0) 20%, rgba(11, 14, 17, 0) 60%, rgba(11, 14, 17, .62) 84%, #0B0E11 100%),
-    linear-gradient(90deg, rgba(11, 14, 17, .86) 0%, rgba(11, 14, 17, .62) 20%, rgba(11, 14, 17, .2) 36%, rgba(11, 14, 17, 0) 48%);
+    linear-gradient(180deg, #0B0E11 0%, rgba(11, 14, 17, .45) 4%, rgba(11, 14, 17, 0) 10%, rgba(11, 14, 17, 0) 86%, #0B0E11 100%),
+    linear-gradient(90deg, #0B0E11 0%, rgba(11, 14, 17, .78) 10%, rgba(11, 14, 17, .55) 22%, rgba(11, 14, 17, .18) 36%, rgba(11, 14, 17, 0) 48%);
 }
 .hero-body { position: relative; z-index: 3; padding-top: calc(var(--header-h) + clamp(28px, 4.5vw, 84px)); padding-bottom: 56px; }
 .hero-body .eyebrow { margin-bottom: 30px; }
@@ -527,6 +529,7 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 .principles li > span:last-child { display: flex; flex-direction: column; gap: 4px; }
 .principles b { font-weight: 400; font-size: 15px; color: var(--ink); }
 .principles b + span { font-size: 12.5px; color: var(--ink-4); }
+.principles .en { font-family: var(--mono); font-size: 10.5px; letter-spacing: .02em; color: var(--mute); }
 .proof { margin-top: 4px; font-size: 10px; letter-spacing: .04em; color: var(--ice); }
 .proof::before { content: '↳ '; }
 
@@ -645,6 +648,9 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 .palette-foot kbd { min-width: 18px; height: 18px; }
 
 /* ════ RESPONSIVE ════════════════════════════════════════════════ */
+@media (max-width: 1360px) {
+  .tagline { display: none; }
+}
 @media (max-width: 1240px) {
   .nav, .tagline { display: none; }
   .hctl { margin-left: auto; }
@@ -655,12 +661,12 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 }
 @media (max-width: 900px) {
   .term, .beneath .dash { display: none; }
-  /* Планшет и телефон: портретный кадр сверху, текст ниже на затухании */
-  .hero { min-height: 0; }
-  .hero-media { position: relative; left: 0; aspect-ratio: 5 / 4; max-height: 78vh; }
+  /* Планшет и телефон: портретный кадр сверху, текст ниже — на растворении */
+  .hero { --band-ar: .823; min-height: calc(100vw / var(--band-ar)); }
+  .hero-media { left: 0; }
   .hero-media img { object-position: 30% 0; }
-  .hero-shade { background: linear-gradient(180deg, rgba(11, 14, 17, .6) 0%, rgba(11, 14, 17, 0) 22%, rgba(11, 14, 17, 0) 56%, rgba(11, 14, 17, .78) 84%, #0B0E11 100%); }
-  .hero-body { margin-top: -110px; padding-top: 0; padding-bottom: 44px; }
+  .hero-shade { background: linear-gradient(180deg, #0B0E11 0%, rgba(11, 14, 17, .4) 4%, rgba(11, 14, 17, 0) 10%, rgba(11, 14, 17, 0) 58%, rgba(11, 14, 17, .5) 74%, rgba(11, 14, 17, .4) 86%, #0B0E11 100%); }
+  .hero-body { padding-top: calc(100vw / var(--band-ar) * .72); padding-bottom: 44px; }
   .h1, .hero-lead { max-width: none; }
   .scroll-hint { margin-top: 36px; }
 }
@@ -672,7 +678,7 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
   .beneath-toggle, .palette-btn { padding: 0 12px; }
   .pill { padding: 0 18px; }
 
-  .hero-media { aspect-ratio: 4 / 5; }
+  .hero { --band-ar: .518; }
   .hero-media img { object-position: 14% 0; }
   .hero-body .eyebrow { margin-bottom: 26px; gap: 10px; letter-spacing: .18em; }
   .eyebrow .rule { width: 20px; }

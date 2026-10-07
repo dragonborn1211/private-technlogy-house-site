@@ -26,26 +26,26 @@
 
   /* ── Данные ───────────────────────────────────────────────────── */
   var OBJ = [
-    { n: '01', cat: 'Commerce / Digital Product', name: 'Титарка Атлас', desc: '[Одна фраза о продукте: что это и для кого.]', stack: '[headless e-commerce · API · 1С]' },
-    { n: '02', cat: 'Systems / CRM', name: '[Объект 02]', desc: '[Одна фраза о системе.]', stack: '[Битрикс24 · n8n · телефония]' },
-    { n: '03', cat: 'Intelligence / AI', name: '[Объект 03]', desc: '[Одна фраза об AI-решении.]', stack: '[LLM · RAG · база знаний]' },
-    { n: '00', cat: 'Object №00 / This site', name: 'The House itself', desc: 'Сайт, который вы сейчас смотрите. Войдите — и поверхность станет прозрачной.', stack: 'HTML · CSS · vanilla JS · 0 зависимостей', self: true }
+    { n: '01', cat: 'Коммерция / Цифровой продукт', name: 'Титарка Атлас', desc: '[Одна фраза о продукте: что это и для кого.]', stack: '[headless e-commerce · API · 1С]' },
+    { n: '02', cat: 'Системы / CRM', name: '[Объект 02]', desc: '[Одна фраза о системе.]', stack: '[Битрикс24 · n8n · телефония]' },
+    { n: '03', cat: 'Интеллект / AI', name: '[Объект 03]', desc: '[Одна фраза об AI-решении.]', stack: '[LLM · RAG · база знаний]' },
+    { n: '00', cat: 'Сайт студии', name: 'Объект №00', desc: 'Сайт, который вы сейчас смотрите. Откройте его — и поверхность станет прозрачной.', stack: 'HTML · CSS · vanilla JS · 0 зависимостей', self: true }
   ];
 
   var LAY = [
-    { n: '01', name: 'Interface', title: 'Поверхность, которая не требует объяснений.', desc: 'Быстрый рендеринг, адаптивность, доступность. Одно действие вместо пяти.', stack: 'SSR · адаптив · WCAG AA', file: 'interface/confirm.tsx',
+    { n: '01', name: 'Интерфейс', title: 'Поверхность, которая не требует объяснений.', desc: 'Быстрый рендеринг, адаптивность, доступность. Одно действие вместо пяти.', stack: 'SSR · адаптив · WCAG AA', file: 'interface/confirm.tsx',
       code: 'export function Confirm({ order }) {\n  const pay = usePayment(order.id)\n  return (\n    <Button onClick={pay.confirm} loading={pay.pending}>\n      Готово\n    </Button>\n  )\n}' },
     { n: '02', name: 'API', title: 'Единый вход для всех систем.', desc: 'Чёткие контракты между сайтом, CRM, складом и мобильным приложением.', stack: 'REST · GraphQL · webhooks', file: 'api/orders.ts',
       code: "router.post('/orders', auth(), rateLimit('60/min'),\n  validate(OrderSchema),\n  async (req, res) => {\n    const order = await orders.create(req.body)\n    await events.emit('order.created', order)\n    res.status(201).json(order)\n  })" },
-    { n: '03', name: 'Automation', title: 'Ручная работа уходит из системы.', desc: 'Сценарии, очереди и фоновые задачи, которые работают сами.', stack: 'n8n · очереди · cron', file: 'flows/order.flow.yml',
+    { n: '03', name: 'Автоматизация', title: 'Ручная работа уходит из системы.', desc: 'Сценарии, очереди и фоновые задачи, которые работают сами.', stack: 'n8n · очереди · cron', file: 'flows/order.flow.yml',
       code: 'on: order.created\nsteps:\n  - crm.deal.add:      { from: order }\n  - warehouse.reserve: { items: order.items }\n  - notify.telegram:   { chat: sales }\nretry: { attempts: 3, backoff: exponential }' },
     { n: '04', name: 'CRM', title: 'Сделки, которые не теряются.', desc: 'Воронки, кастомные сущности, телефония и аналитика менеджеров.', stack: 'Битрикс24 · amoCRM · API', file: 'crm/sync.php',
       code: "$deal = CRest::call('crm.deal.add', [\n  'fields' => [\n    'TITLE'       => \"Заказ #{$order->id}\",\n    'OPPORTUNITY' => $order->total,\n    'STAGE_ID'    => 'NEW',\n  ],\n]);" },
-    { n: '05', name: 'Data', title: 'Данные как фундамент.', desc: 'Надёжное хранение, кеширование и отчёты без ручных выгрузок.', stack: 'PostgreSQL · Redis · аналитика', file: 'db/schema.sql',
+    { n: '05', name: 'Данные', title: 'Данные как фундамент.', desc: 'Надёжное хранение, кеширование и отчёты без ручных выгрузок.', stack: 'PostgreSQL · Redis · аналитика', file: 'db/schema.sql',
       code: "create table orders (\n  id         uuid primary key default gen_random_uuid(),\n  status     text not null default 'new',\n  total      numeric(12,2) not null,\n  created_at timestamptz not null default now()\n);\ncreate index on orders (status, created_at desc);" },
-    { n: '06', name: 'Intelligence', title: 'AI там, где он действительно нужен.', desc: 'Ассистенты, базы знаний, анализ звонков и документов внутри ваших процессов.', stack: 'LLM · RAG · агенты', file: 'ai/assistant.ts',
+    { n: '06', name: 'Интеллект', title: 'AI там, где он действительно нужен.', desc: 'Ассистенты, базы знаний, анализ звонков и документов внутри ваших процессов.', stack: 'LLM · RAG · агенты', file: 'ai/assistant.ts',
       code: 'const context = await kb.search(question, { top: 5 })\nconst answer = await llm.complete({\n  system: policy.support,\n  input: question,\n  context,\n})\nreturn cite(answer, context) // с источниками' },
-    { n: '07', name: 'Infrastructure', title: 'Скорость и стабильность — часть красоты.', desc: 'Серверы, деплой без простоя, мониторинг, бэкапы и безопасность.', stack: 'VPS · Docker · CI/CD · Cloudflare', file: 'deploy.yml',
+    { n: '07', name: 'Инфраструктура', title: 'Скорость и стабильность — часть красоты.', desc: 'Серверы, деплой без простоя, мониторинг, бэкапы и безопасность.', stack: 'VPS · Docker · CI/CD · Cloudflare', file: 'deploy.yml',
       code: 'deploy:\n  build:   docker build --target prod .\n  test:    npm test && npm run e2e\n  migrate: db migrate --safe\n  release: blue-green · zero-downtime\n  health:  GET /health → 200 OK' }
   ];
 
@@ -157,7 +157,7 @@
   function updateEnterLabel() {
     var label = $('[data-enter-label]');
     if (!label) return;
-    label.textContent = OBJ[objIdx].self && isBeneath() ? 'Return to the surface' : 'Enter the object';
+    label.textContent = OBJ[objIdx].self && isBeneath() ? 'Вернуться на поверхность' : 'Открыть объект';
   }
   function setObj(i) {
     objIdx = i;
@@ -284,15 +284,15 @@
     var nav = window.performance && performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
     var rows = [
       ['TTFB', nav ? fmtMs(nav.responseStart - nav.startTime) : '—'],
-      ['First paint', fmtMs(M.fcp)],
+      ['Первая отрисовка', fmtMs(M.fcp)],
       ['LCP', fmtMs(M.lcp), M.lcp != null && M.lcp < 2500],
       ['CLS', M.clsSupported ? M.cls.toFixed(3) : '—', M.clsSupported && M.cls < 0.1],
-      ['Transfer', fmtKB(w.bytes)],
-      ['Requests', String(w.req)],
+      ['Передано', fmtKB(w.bytes)],
+      ['Запросы', String(w.req)],
       ['JS / CSS', fmtKB(w.js) + ' / ' + fmtKB(w.css)],
-      ['DOM nodes', String(doc.getElementsByTagName('*').length)],
-      ['Viewport', window.innerWidth + '×' + window.innerHeight],
-      ['Frameworks', '0', true]
+      ['DOM-узлы', String(doc.getElementsByTagName('*').length)],
+      ['Экран', window.innerWidth + '×' + window.innerHeight],
+      ['Фреймворки', '0', true]
     ];
     metricsEl.innerHTML = rows.map(function (r) {
       return '<dt>' + r[0] + '</dt><dd' + (r[2] ? ' class="good"' : '') + '>' + r[1] + '</dd>';
@@ -370,15 +370,15 @@
 
   function commands() {
     var list = [
-      { g: 'Разделы', label: 'Entrance', hint: '01', k: 'главная начало hero', run: function () { go('#top'); } },
-      { g: 'Разделы', label: 'Capabilities — направления и цены', hint: 'from 250K', k: 'услуги сервисы цены разработка сайты crm ai инфраструктура', run: function () { go('#services'); } },
-      { g: 'Разделы', label: 'The House', hint: '02', k: 'о нас команда дом', run: function () { go('#house'); } },
-      { g: 'Разделы', label: 'Objects', hint: '03', k: 'проекты портфолио кейсы работы', run: function () { go('#objects'); } },
-      { g: 'Разделы', label: 'Craft — слои системы', hint: '04', k: 'технологии стек api данные автоматизация', run: function () { go('#craft'); } },
-      { g: 'Разделы', label: 'How an object is built', hint: '05', k: 'процесс этапы как работаем', run: function () { go('#process'); } },
-      { g: 'Разделы', label: 'The Standard', hint: '06', k: 'принципы стандарт качество', run: function () { go('#standard'); } },
-      { g: 'Разделы', label: 'Enter — обсудить проект', hint: '07', k: 'контакт связаться заявка написать', run: function () { go('#enter'); } },
-      { g: 'Действия', label: isBeneath() ? 'Вернуться на поверхность' : 'Показать, что под поверхностью', hint: 'B', k: 'beneath x-ray метрики структура код', run: function () { setBeneath(!isBeneath()); } }
+      { g: 'Разделы', label: 'Главная', hint: '01', k: 'главная начало hero', run: function () { go('#top'); } },
+      { g: 'Разделы', label: 'Направления и цены', hint: 'от 250 тыс. ₽', k: 'услуги сервисы цены разработка сайты crm ai инфраструктура', run: function () { go('#services'); } },
+      { g: 'Разделы', label: 'Дом', hint: '02', k: 'о нас команда дом', run: function () { go('#house'); } },
+      { g: 'Разделы', label: 'Объекты', hint: '03', k: 'проекты портфолио кейсы работы', run: function () { go('#objects'); } },
+      { g: 'Разделы', label: 'Под поверхностью — слои системы', hint: '04', k: 'технологии стек api данные автоматизация', run: function () { go('#craft'); } },
+      { g: 'Разделы', label: 'Как строится объект', hint: '05', k: 'процесс этапы как работаем', run: function () { go('#process'); } },
+      { g: 'Разделы', label: 'Стандарт', hint: '06', k: 'принципы стандарт качество', run: function () { go('#standard'); } },
+      { g: 'Разделы', label: 'Связаться — обсудить проект', hint: '07', k: 'контакт связаться заявка написать', run: function () { go('#enter'); } },
+      { g: 'Действия', label: isBeneath() ? 'Вернуться на поверхность' : 'Глубина — показать, что под поверхностью', hint: 'B', k: 'beneath глубина x-ray метрики структура код', run: function () { setBeneath(!isBeneath()); } }
     ];
     if (CONFIG.telegram) list.push({ g: 'Действия', label: 'Написать в Telegram', hint: '@' + CONFIG.telegram, k: 'telegram телеграм', run: function () { window.open('https://t.me/' + CONFIG.telegram, '_blank', 'noopener'); } });
     if (CONFIG.email) list.push({ g: 'Действия', label: 'Скопировать email', hint: CONFIG.email, k: 'почта email', run: function () { if (navigator.clipboard) navigator.clipboard.writeText(CONFIG.email); } });

@@ -11,6 +11,9 @@
 docs/reference/hero-source.jpg и поправьте SCALE/OFFSET (или замените
 сборку на прямой экспорт оригинала).
 
+Ниже кадра пикселей нет ни в одном источнике, поэтому продолжение вниз
+синтезируется: нижняя часть зеркалится и размывается всё сильнее, уходя в фон.
+
 Запуск из корня репозитория:  python3 tools/build_hero.py
 Нужен Pillow с поддержкой AVIF и WebP, и numpy.
 """
@@ -35,6 +38,14 @@ TEXT_BOXES = [
     ((1076, 110, 1170, 290), 9, 2, 8),    # IDEAS ENGINEERED INTO REALITY + линия
 ]
 SEAM = 110                # ширина мягкого шва, px исходника
+
+# Продолжение вниз: кадр зеркалится и постепенно размывается, пока тело
+# не растворится в фоне сайта.
+EXTEND = 440                                  # px исходника под кадром
+BLUR_START = 220                              # размытие начинается выше шва, ещё на теле
+STRETCH_TOP, STRETCH_BOTTOM = .85, .55        # доля вытягивания у шва и внизу (остальное — зеркало)
+BLUR_LEVELS = [0, 2, 4, 8, 16, 32, 64, 110]   # радиусы, между которыми интерполируем
+BG = np.array([11, 14, 17], dtype=np.float32)  # #0B0E11 — фон сайта
 
 
 def soft_mask(size, box, feather):
@@ -61,6 +72,47 @@ def seam_mask(w, h, top):
     else:
         a = np.tile(a, (h, 1))
     return Image.fromarray((a * 255).astype(np.uint8))
+
+
+def smoothstep(t):
+    t = np.clip(t, 0, 1)
+    return t * t * (3 - 2 * t)
+
+
+def extend_bottom(img):
+    """Продолжает кадр вниз с нарастающим размытием и уходом в цвет фона."""
+    w, h = img.size
+    # Ниже шва — нижний край кадра, вытянутый вниз (тело «продолжается»),
+    # с небольшой примесью зеркала, чтобы под размытием оставалась фактура.
+    px = np.asarray(img, dtype=np.float32)
+    edge = px[h - 10:h].mean(axis=0)
+    stretch = np.repeat(edge[None], EXTEND, axis=0)
+    mirror = px[h - EXTEND:h][::-1]
+    mix = np.linspace(STRETCH_TOP, STRETCH_BOTTOM, EXTEND, dtype=np.float32)[:, None, None]
+    ext = stretch * mix + mirror * (1 - mix)
+    tall = Image.new('RGB', (w, h + EXTEND))
+    tall.paste(img, (0, 0))
+    tall.paste(Image.fromarray(np.clip(ext, 0, 255).astype(np.uint8)), (0, h))
+
+    levels = [np.asarray(tall if r == 0 else tall.filter(ImageFilter.GaussianBlur(r)), dtype=np.float32)
+              for r in BLUR_LEVELS]
+    H = h + EXTEND
+    y = np.arange(H, dtype=np.float32)
+    start = h - BLUR_START
+    radius = BLUR_LEVELS[-1] * np.clip((y - start) / (H - start), 0, 1) ** 1.6
+    idx = np.interp(radius, BLUR_LEVELS, np.arange(len(BLUR_LEVELS)))
+
+    out = np.empty_like(levels[0])
+    for row in range(H):
+        lo = int(idx[row]); hi = min(lo + 1, len(levels) - 1); f = idx[row] - lo
+        out[row] = levels[lo][row] * (1 - f) + levels[hi][row] * f
+
+    # уход в цвет фона: начинается чуть выше шва, к низу кадра — ровно #0B0E11
+    d = smoothstep((y - (h - 60)) / (EXTEND + 60))[:, None, None]
+    out = out * (1 - d) + BG * d
+    # мелкое зерно против полос на плавных градиентах после сжатия
+    out[h - BLUR_START:] += np.random.default_rng(11).normal(0, 1.1, out[h - BLUR_START:].shape[:2])[..., None]
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
 
 
 def build():
@@ -94,10 +146,11 @@ def export(img, name, width=None, box=None):
 
 
 if __name__ == '__main__':
-    hero = build()                                   # 2428x824
-    export(hero, 'hero')                             # десктоп, полный кадр
+    frame = build()                                  # 2428x824 — сам кадр
+    hero = extend_bottom(frame)                      # 2428x1264 — с растворением вниз
+    export(hero, 'hero')                             # десктоп
     export(hero, 'hero-1600', width=1600)            # десктоп до ~1250 px
-    export(hero, 'hero-m', box=(800, 0, 1840, 824))  # телефон: портретный кроп вокруг лица
-    og = hero.crop((560, 0, 2130, 824)).resize((1200, 630), Image.LANCZOS)
+    export(hero, 'hero-m', box=(800, 0, 1840, hero.height))  # планшет/телефон: портретный кроп
+    og = frame.crop((560, 0, 2130, 824)).resize((1200, 630), Image.LANCZOS)
     og.save(OUT / 'og.jpg', quality=88, optimize=True, progressive=True)
     print('og.jpg', og.size)
