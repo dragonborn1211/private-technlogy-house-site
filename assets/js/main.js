@@ -26,10 +26,10 @@
 
   /* ── Данные ───────────────────────────────────────────────────── */
   var OBJ = [
-    { n: '01', cat: 'Коммерция / Цифровой продукт', name: 'Титарка Атлас', desc: '[Одна фраза о продукте: что это и для кого.]', stack: '[headless e-commerce · API · 1С]' },
-    { n: '02', cat: 'Системы / CRM', name: '[Объект 02]', desc: '[Одна фраза о системе.]', stack: '[Битрикс24 · n8n · телефония]' },
-    { n: '03', cat: 'Интеллект / AI', name: '[Объект 03]', desc: '[Одна фраза об AI-решении.]', stack: '[LLM · RAG · база знаний]' },
-    { n: '00', cat: 'Сайт студии', name: 'Объект №00', desc: 'Сайт, который вы сейчас смотрите. Откройте его — и поверхность станет прозрачной.', stack: 'HTML · CSS · vanilla JS · 0 зависимостей', self: true }
+    { n: '01', cat: 'Коммерция / Цифровой продукт', name: 'Титарка Атлас', desc: '[Одна фраза о продукте: что это и для кого.]', stack: '[headless e-commerce · API · 1С]', url: '[домен] / каталог' },
+    { n: '02', cat: 'Системы / CRM', name: '[Объект 02]', desc: '[Одна фраза о системе.]', stack: '[Битрикс24 · n8n · телефония]', url: '[домен] / crm / сделки' },
+    { n: '03', cat: 'Интеллект / AI', name: '[Объект 03]', desc: '[Одна фраза об AI-решении.]', stack: '[LLM · RAG · база знаний]', url: '[домен] / ассистент' },
+    { n: '00', cat: 'Сайт студии', name: 'Объект №00', desc: 'Сайт, который вы сейчас смотрите. Откройте его — и поверхность станет прозрачной.', stack: 'HTML · CSS · vanilla JS · 0 зависимостей', url: location.host || 'этот сайт', self: true }
   ];
 
   var LAY = [
@@ -152,6 +152,7 @@
 
   /* ── 03 Objects ───────────────────────────────────────────────── */
   var objCard = $('.obj-card');
+  var objPreview = $('.obj-preview');
   var objIdx = 0;
   var enterLink = $('[data-obj-enter]');
   function updateEnterLabel() {
@@ -161,7 +162,8 @@
   }
   function setObj(i) {
     objIdx = i;
-    swap('obj', [objCard], function () { bind('cur', OBJ[i]); updateEnterLabel(); });
+    swap('obj', [objCard, objPreview], function () { bind('cur', OBJ[i]); updateEnterLabel(); });
+    $$('[data-preview]').forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-preview') === String(i)); });
     $$('[data-pick^="obj:"]').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-pick') === 'obj:' + i));
     });

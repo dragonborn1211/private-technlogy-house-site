@@ -175,20 +175,13 @@
 </section>
 
 <!-- ═════ 02 THE HOUSE ═════ -->
-<section id="house" class="house" data-x="02 Дом · flex · 2 изображения lazy">
-  <div class="house-media zoom">
-    <img src="assets/img/house-glass.webp" width="1116" height="444" alt="Стеклянный дом над горами на закате" loading="lazy" decoding="async">
-    <div class="house-shade"></div>
+<section id="house" class="house" data-x="02 Дом · CSS grid · без изображений">
+  <div class="wrap house-row">
     <div class="house-body reveal">
       <p class="eyebrow mono"><b>02</b> / 07</p>
       <h2 class="h2 serif">Дом</h2>
       <p class="lead">Не агентство и не команда фрилансеров. Закрытый технологический дом: собственная инженерия, полный цикл — от архитектуры до серверов — и приватность по умолчанию.</p>
       <a class="link-line" href="#standard">О доме <span class="arrow">→</span></a>
-    </div>
-  </div>
-  <div class="house-side">
-    <div class="house-crystal zoom reveal">
-      <img src="assets/img/crystal-detail.webp" width="322" height="332" alt="Кристалл льда крупным планом" loading="lazy" decoding="async">
     </div>
     <ul class="disciplines reveal">
       <li><span>Инженерия</span><span class="mono">backend · архитектура</span></li>
@@ -202,9 +195,7 @@
 </section>
 
 <!-- ═════ 03 OBJECTS ═════ -->
-<section id="objects" class="objects" data-x="03 Объекты · состояние на клиенте · 4 объекта">
-  <img class="objects-img" src="assets/img/object-hypercar.webp" width="1500" height="416" alt="Гиперкар на льду у подножия гор" loading="lazy" decoding="async">
-  <div class="objects-shade"></div>
+<section id="objects" class="objects" data-x="03 Объекты · состояние на клиенте · превью на CSS">
   <div class="wrap objects-row">
     <div class="objects-info reveal">
       <p class="eyebrow mono"><b>03</b> / 07</p>
@@ -216,6 +207,46 @@
         <span class="obj-desc" data-b="cur.desc">[Одна фраза о продукте: что это и для кого.]</span>
         <span class="obj-stack mono" data-b="cur.stack">[headless e-commerce · API · 1С]</span>
         <a href="#objects" class="link-line" data-obj-enter><span data-enter-label>Открыть объект</span> <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="glass obj-preview reveal" aria-hidden="true" data-x="Превью объекта · HTML + CSS, без картинок">
+      <div class="win-bar"><i></i><i></i><i></i><span class="url mono" data-b="cur.url">[домен] / каталог</span></div>
+      <div class="pv-stage">
+        <!-- 01 · коммерция: витрина -->
+        <div class="pv pv-shop on" data-preview="0">
+          <div class="pv-nav"><b></b><i></i><i></i><i></i><em></em></div>
+          <div class="pv-banner"><i></i><i></i><span></span></div>
+          <div class="pv-grid">
+            <div><span></span><i></i><i></i></div><div><span></span><i></i><i></i></div><div><span></span><i></i><i></i></div>
+            <div><span></span><i></i><i></i></div><div><span></span><i></i><i></i></div><div><span></span><i></i><i></i></div>
+          </div>
+        </div>
+        <!-- 02 · системы: воронка CRM -->
+        <div class="pv pv-crm" data-preview="1">
+          <div class="pv-side"><b></b><i></i><i></i><i></i><i></i></div>
+          <div class="pv-board">
+            <div class="pv-kpi"><span><em></em><b></b></span><span><em></em><b></b></span><span><em></em><b></b></span></div>
+            <div class="pv-cols">
+              <div><em></em><i></i><i></i><i></i></div>
+              <div><em></em><i></i><i></i></div>
+              <div><em></em><i></i><i></i><i></i></div>
+              <div><em></em><i></i></div>
+            </div>
+          </div>
+        </div>
+        <!-- 03 · AI: ассистент с источниками -->
+        <div class="pv pv-ai" data-preview="2">
+          <div class="pv-msg me"><i style="width:62%"></i></div>
+          <div class="pv-msg"><i style="width:92%"></i><i style="width:84%"></i><i style="width:58%"></i><span class="mono">kb://договор · kb://регламент</span></div>
+          <div class="pv-msg me"><i style="width:44%"></i></div>
+          <div class="pv-msg typing"><b></b><b></b><b></b></div>
+          <div class="pv-input"><i></i><em></em></div>
+        </div>
+        <!-- 00 · этот сайт: поверхность и структура под ней -->
+        <div class="pv pv-self" data-preview="3">
+          <div class="pv-hero"><span class="pv-light"></span><i style="width:38%"></i><i style="width:30%"></i><i style="width:24%"></i></div>
+          <div class="pv-blocks mono"><span>01 главная</span><span>02 дом</span><span>03 объекты</span><span>04 глубина</span></div>
+        </div>
       </div>
     </div>
     <div class="thumbs reveal" role="group" aria-label="Объекты">
@@ -246,7 +277,6 @@
 <!-- ═════ 04 CRAFT ═════ -->
 <section id="craft" class="craft" data-x="04 Под поверхностью · CSS 3D · 7 слоёв системы">
   <div class="craft-visual" data-stack-area>
-    <img class="craft-img" src="assets/img/craft-ice.webp" width="1200" height="376" alt="" loading="lazy" decoding="async">
     <div class="craft-shade"></div>
     <div class="stack" aria-hidden="true">
       <div class="stack-3d" data-stack>
