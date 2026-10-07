@@ -132,7 +132,6 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 
 .emerge { animation: emerge 1.8s var(--ease) both; }
 .d1 { animation-delay: .25s; } .d2 { animation-delay: .6s; } .d3 { animation-delay: 1s; } .d4 { animation-delay: 1.4s; }
-.drift { animation: drift 26s ease-in-out infinite alternate; }
 .pulse { animation: pulse 2.4s ease-in-out infinite; }
 
 /* Проявление при прокрутке: скрываем только если JS работает */
@@ -775,6 +774,7 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
   .hero-stage { padding-bottom: 96px; }
   .term { left: 16px; }
   .dash-rail { display: none; }
+  .dash .url { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .dash-main { padding: 14px; gap: 12px; }
   .kpis { gap: 6px; }
   .kpi { padding: 8px 9px; }
@@ -843,7 +843,7 @@ a:hover .arrow, button:hover .arrow { transform: translateX(6px); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .emerge, .drift, .sweep, .pulse, .sdot, .marq-track, .plate.on::after, .hud:not([hidden]), .palette-box, .pv-msg.typing b { animation: none !important; }
+  .emerge, .hero-light, .sweep, .pulse, .sdot, .marq-track, .plate.on::after, .hud:not([hidden]), .palette-box, .pv-msg.typing b { animation: none !important; }
   .js .chart-line { stroke-dashoffset: 0; animation: none; }
   .js .chart-area { opacity: 1; animation: none; }
   .js .reveal { opacity: 1; transform: none; filter: none; }
