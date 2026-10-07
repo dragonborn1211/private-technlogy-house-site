@@ -16,12 +16,11 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Private Technology House">
 <meta property="og:description" content="Websites. Systems. Intelligence. Engineered to feel effortless.">
-<meta property="og:image" content="assets/img/hero-ice.webp">
+<meta property="og:image" content="assets/img/og.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26' fill='none' stroke='%23C8DCE6' stroke-width='1.4'%3E%3Cpath d='M13 2 23 10 13 24 3 10Z'/%3E%3Cpath d='M3 10H23M8 10 13 2l5 8M8 10l5 14 5-14'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Onest:wght@300;400;500&amp;family=JetBrains+Mono:wght@300;400&amp;display=swap">
-<link rel="preload" as="image" href="assets/img/hero-ice.webp" imagesrcset="assets/img/hero-ice-800.webp 800w, assets/img/hero-ice.webp 1480w" imagesizes="(max-width: 760px) 100vw, 74vw" fetchpriority="high">
 <link rel="stylesheet" href="assets/css/main.css">
 <script>document.documentElement.classList.add('js')</script>
 <script src="assets/js/main.js" defer></script>
@@ -62,12 +61,16 @@
 <main id="main">
 
 <!-- ═════ 01 ENTRANCE ═════ -->
-<section id="top" class="hero" data-x="01 Entrance · static HTML · LCP-изображение с fetchpriority">
+<section id="top" class="hero" data-x="01 Entrance · AVIF/WebP · отдельный кадр для телефона">
   <div class="hero-media">
-    <img class="drift" src="assets/img/hero-ice.webp" srcset="assets/img/hero-ice-800.webp 800w, assets/img/hero-ice.webp 1480w" sizes="(max-width: 760px) 100vw, 74vw" width="1480" height="744" alt="Кампанийный кадр: женщина в ледяной накидке на фоне гор" fetchpriority="high">
+    <picture>
+      <source media="(max-width: 900px)" type="image/avif" srcset="assets/img/hero-m.avif">
+      <source media="(max-width: 900px)" type="image/webp" srcset="assets/img/hero-m.webp">
+      <source type="image/avif" srcset="assets/img/hero-1600.avif 1600w, assets/img/hero.avif 2428w" sizes="135vw">
+      <img class="drift" src="assets/img/hero.webp" srcset="assets/img/hero-1600.webp 1600w, assets/img/hero.webp 2428w" sizes="135vw" width="2428" height="824" alt="Кампанийный кадр: женщина в ледяной накидке на фоне гор и солнца" fetchpriority="high" decoding="async">
+    </picture>
+    <div class="hero-shade"></div>
   </div>
-  <div class="hero-shade-x"></div>
-  <div class="hero-shade-y"></div>
 
   <div class="wrap hero-body">
     <p class="eyebrow mono emerge"><b>01</b> / 07 <span class="rule"></span> Digital engineering house</p>
@@ -76,6 +79,10 @@
     <div class="hero-cta emerge d3">
       <a class="btn btn-solid" href="#objects">View objects <span class="arrow">→</span></a>
       <a class="btn btn-ghost" href="#enter">Обсудить проект</a>
+    </div>
+    <div class="scroll-hint emerge d4" aria-hidden="true">
+      <span class="mouse"><span class="sdot"></span></span>
+      <span class="mono">Scroll</span>
     </div>
   </div>
 
@@ -90,8 +97,8 @@
     </div>
   </div>
 
-  <!-- product dashboard -->
-  <div class="glass dash emerge d3" role="img" aria-label="Пример интерфейса продукта: дашборд заказов, CRM и AI" data-x="Glass panel · backdrop-filter · чистый CSS">
+  <!-- product dashboard: проявляется только в режиме Beneath, чтобы не закрывать кадр -->
+  <div class="glass dash" role="img" aria-label="Пример интерфейса продукта: дашборд заказов, CRM и AI" data-x="Product UI · виден только под поверхностью">
     <div class="win-bar">
       <i></i><i></i><i></i>
       <span class="url mono">app.yourproduct.ru / dashboard</span>
@@ -120,11 +127,6 @@
       </div>
     </div>
     <div class="sweep"></div>
-  </div>
-
-  <div class="wrap scroll-hint" aria-hidden="true">
-    <span class="mouse"><span class="sdot"></span></span>
-    <span class="mono">Scroll</span>
   </div>
 </section>
 
