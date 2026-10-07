@@ -539,9 +539,9 @@
   if (window.console && console.log) {
     console.log(
       '%cPTH%c  Private Technology House\n\n%cВы заглянули под поверхность. Нам это нравится.\nНажмите B — и сайт покажет, как он устроен.',
-      'font: 500 22px Georgia, serif; letter-spacing: .06em; color: #C8DCE6',
-      'font: 400 10px monospace; letter-spacing: .3em; color: #7D8A93',
-      'font: 400 12px/1.6 monospace; color: #9AA7B0'
+      'font: 500 22px Georgia, serif; letter-spacing: .06em; color: #4F7184',
+      'font: 400 10px monospace; letter-spacing: .3em; color: #6F8796',
+      'font: 400 12px/1.6 monospace; color: #6F8796'
     );
   }
 })();
