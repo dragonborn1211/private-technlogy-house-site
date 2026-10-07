@@ -22,7 +22,7 @@ npx serve .
 index.html            разметка всех секций
 assets/css/main.css   токены, секции, режим «Глубина», адаптив
 assets/js/main.js     данные объектов и слоёв, интерактив, метрики, палитра
-assets/img/           изображения: hero в AVIF + WebP, остальные в WebP
+assets/img/           фото: только hero (AVIF + WebP) и гора в «Стандарте» (WebP), og.jpg для ссылок
 tools/build_hero.py   сборка широкого кадра hero из макета и исходника
 docs/                 концепция, макет и исходник кадра hero
 ```
@@ -73,7 +73,7 @@ python3 tools/build_hero.py   # пересобирает assets/img/hero*.avif|w
 
 ## Где править контент
 
-- **Объекты** — массив `OBJ` в `assets/js/main.js` (имя, категория, описание, стек). Миниатюры — `.thumb` в `index.html`.
+- **Объекты** — массив `OBJ` в `assets/js/main.js` (имя, категория, описание, стек, `url` для строки адреса в превью). Миниатюры — `.thumb`, окна-превью — `.pv[data-preview="N"]` в `index.html`. Превью нарисованы на HTML и CSS, без картинок. Индекс `N` совпадает с порядком в `OBJ`.
 - **Слои Craft** — массив `LAY` там же (заголовок, описание, стек, код).
 - **Каналы связи** — объект `CONFIG` в начале `assets/js/main.js`:
   - `endpoint` — URL, принимающий `POST application/json { task, contact }`;
@@ -90,5 +90,5 @@ python3 tools/build_hero.py   # пересобирает assets/img/hero*.avif|w
 - [ ] `og:image` и canonical — нужен абсолютный URL после выбора домена.
 - [ ] Самостоятельный хостинг шрифтов (Cormorant Garamond, Onest, JetBrains Mono) вместо Google Fonts — быстрее и надёжнее для РФ.
 - [ ] Страницы `/services/web`, `/services/crm`, `/services/automation`, `/services/ai`, `/services/infrastructure` (концепция, §39).
-- [ ] Оригиналы фото в большом разрешении: hero собран из исходника 1480 px и макета, остальные кадры — кропы из макета (гора — 690 px).
+- [ ] Оригиналы фото в большом разрешении: hero собран из исходника 1480 px и макета, гора в «Стандарте» — кроп из макета (690 px).
 - [ ] Деплой (GitHub Pages / Cloudflare Pages) и настоящий хеш коммита в футере.
